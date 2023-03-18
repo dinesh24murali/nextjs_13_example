@@ -1,49 +1,37 @@
-import CreateTodo from "./CreateTodo";
-import PocketBase from 'pocketbase';
+import Link from "next/link"
 
 export const dynamic = true,
     dynamicParams = true,
     revalidate = 0,
-    fetchCache = false,
+    fetchCache = 'force-no-store',
     runtime = 'nodejs',
     preferredRegion = 'auto';
 
-const pb = new PocketBase('http://127.0.0.1:8090');
-
 const getTodos = async () => {
 
-    // const res = await fetch(
-    //     `http://localhost:3000/api/todo`,
-    //     { cache: 'no-store' });
-    // const data = (await res).json();
-    await pb.admins.authWithPassword('samfuller3477@yopmail.com', 'smallerThan12@');
-    const resultList = await pb.collection('todo').getList(1, 50);
+    try {
 
-    console.log({
-        data: resultList.items
-    })
-    return resultList.items;
+        const res = await fetch('http://localhost:3000/api/todo',
+            { cache: 'no-store' });
+        const data = (await res).json();
+        return data;
+    } catch (error) {
+        return [];
+    }
 }
 
-export default async function Todos() {
+export default async function Todo() {
 
-    let data: any = [];
+    let data: any = await getTodos();
 
-    const gt = await getTodos();
-
-    if (gt) {
-        data = gt;
-    }
-
-    return <div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+    return <div className="todo-container">
+        <div className="todo-list">
             {data.map((item: any, index: number) => <div
                 key={index}
-                style={{ display: 'flex', flexDirection: 'row' }}>
-                <div>{item.title}</div>
-                <div>{item.body}</div>
+                className="todo-item">
+                <Link href={`/todo/${item.id}`} className="todo-title">{item.title}:</Link>
+                <div className="todo-description">{item.description}</div>
             </div>)}
         </div>
-        <CreateTodo />
     </div>
 }
