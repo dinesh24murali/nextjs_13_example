@@ -10,5 +10,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ title: 'Todoid', body: 'Joe tribiani' })
+  res.status(200).json({ title: 'Todo', body: 'Todo body' })
 }

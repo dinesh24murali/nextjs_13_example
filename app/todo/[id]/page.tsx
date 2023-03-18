@@ -1,29 +1,29 @@
-import testing from "../(helper)/utils";
-
 const getTodo = async () => {
 
-    const res = await fetch(
-        `http://localhost:3000/api/todo/12`,
-        { next: { revalidate: 10 } }
+    try {
+
+        const res = await fetch(
+            'http://localhost:3000/api/todo/12',
+            { next: { revalidate: 10 } }
         );
-    const data = (await res).json();
-    return data;
+        const data = (await res).json();
+        return data;
+    } catch (error) {
+        return {}
+    }
 }
 
 export default async function Todo() {
 
     let data: any = {};
 
-    const ht = testing();
+    const temp = await getTodo();
 
-    const gt = await getTodo();
-
-    if (gt) {
-        data = gt;
+    if (temp) {
+        data = temp;
     }
 
     return <div>
-        <h2>{ht}</h2>
         <div
             style={{ display: 'flex', flexDirection: 'column' }}>
             <div>{data.title}</div>

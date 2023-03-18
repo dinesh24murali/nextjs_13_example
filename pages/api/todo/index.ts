@@ -8,24 +8,21 @@ type Data = {
 
 export default function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Data[]>
+    res: NextApiResponse<Data[] | Data>
 ) {
 
     if (req.method === 'POST') {
-        console.log({
-            req
-        })
         const data = JSON.parse(req.body);
         // Process a POST request
-        res.status(200).json([{
+        res.status(200).json({
             title: data.title,
             body: data.body,
-        }])
+        })
     } else {
         // Handle any other HTTP method
         const temp: Data[] = [
-            { title: 'Todo1', body: 'John Doe' },
-            { title: 'Todo2', body: 'John Doe' }
+            { title: 'Todo1', body: 'Todo body 1' },
+            { title: 'Todo2', body: 'Todo body 2' }
         ];
         res.status(200).json(temp)
     }
